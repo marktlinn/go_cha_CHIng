@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
+	"os/signal"
 
 	"github.com/marktlinn/go_cha_CHIng/application"
 )
@@ -10,8 +12,11 @@ import (
 func main() {
 	app := application.New()
 
-	err := app.StartServer(context.TODO())
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer cancel()
+	err := app.StartServer(ctx)
 	if err != nil {
 		fmt.Printf("App failed to start %v\n", err)
 	}
+
 }
