@@ -17,10 +17,20 @@ func loadRoutes() *chi.Mux {
 	})
 
 	router.Route("/health-check", loadHealthCheck)
-
+	router.Route("/orders", loadOrderRoutes)
 	return router
 }
 
 func loadHealthCheck(router chi.Router) {
 	router.Get("/", handler.HealthCheck)
+}
+
+func loadOrderRoutes(router chi.Router) {
+	orderHandler := &handler.Order{}
+
+	router.Post("/", orderHandler.Create)
+	router.Get("/", orderHandler.List)
+	router.Get("/{id}", orderHandler.GetByID)
+	router.Put("/{id}", orderHandler.UpdateByID)
+	router.Delete("/{id}", orderHandler.DeleteByID)
 }
